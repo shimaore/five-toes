@@ -3,6 +3,8 @@
       prov = new CouchDB cfg.provisioning
 
       (local_number) ->
+        ln = local_number.match /^([^@]+)@([^@]+)$/
+        return unless ln?
 
 Collect the endpoint/via fields from the local number.
 
@@ -17,27 +19,36 @@ Use the endpoint name and via to route the packet.
         debug 'resolve', {via,endpoint}
         return unless endpoint?
 
+        switch
+
 Registered endpoint
 
-        if m = endpoint.match /^([^@]+)@([^@]+)$/
-          to = endpoint
-          if via?
-            uri = [m[1],via].join '@'
-          else
-            uri = endpoint
-          return {uri,to,endpoint}
+          when m = endpoint.match /^([^@]+)@([^@]+)$/
+            debug 'registered endpoint'
+
+            to = endpoint
+            if via?
+              uri = [m[1],via].join '@'
+            else
+              uri = endpoint
+            return {uri,to,endpoint}
 
 Static endpoint
 
-        else
-          if via?
-            to = [local_number,endpoint].join '@'
-            uri = [local_number,via].join '@'
-            return {uri,to,endpoint}
-          else
-            debug 'No `via` for static endpoint, skipping.'
+          when endpoint.match /^[^@]+$/
+            debug 'static endpoint'
 
-        return
+            if via?
+              to = [ln[1],endpoint].join '@'
+              uri = [ln[1],via].join '@'
+              return {uri,to,endpoint}
+            else
+              debug 'No `via` for static endpoint, skipping.'
+              return
+
+          else
+            debug 'Invalid endpoint, skipping.'
+            return
 
     CouchDB = require 'most-couchdb'
     get_prov = require './get-prov'

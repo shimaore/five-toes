@@ -1,0 +1,12 @@
+image: node:alpine
+test:
+  services:
+  - couchdb
+  variables:
+    COUCHDB_USER: admin
+    COUCHDB_PASSWORD: password
+    DEBUG: 'five-toes:*,*:dev,superagent*'
+  script:
+  - npm install
+  - npm audit
+  - npm test

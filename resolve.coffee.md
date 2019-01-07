@@ -22,7 +22,7 @@ URI DNS resolution and cache
 
 URI = username@host:port
 
-      if m = uri.match /^([^@]+)@(^[@:]+):(\d+)$/
+      if m = uri.match /^([^@]+)@([^@:]+):(\d+)$/
         name = m[2]
         port = parseInt m[3], 10
         debug 'resolve', {name,port}
