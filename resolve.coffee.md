@@ -1,9 +1,7 @@
 URI DNS resolution and cache
 ============================
 
-    pkg = require '../package'
-    @name = "#{pkg.name}:resolve"
-    debug = (require 'tangible') @name
+    {debug} = (require 'tangible') 'five-toes:resolve'
     LRU = require 'lru-cache'
 
     dns = require 'dns'
@@ -26,7 +24,7 @@ URI = username@host:port
 
       if m = uri.match /^([^@]+)@(^[@:]+):(\d+)$/
         name = m[2]
-        port = m[3]
+        port = parseInt m[3], 10
         debug 'resolve', {name,port}
         result.push {port,name}
 
