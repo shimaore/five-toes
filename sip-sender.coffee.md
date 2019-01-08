@@ -14,8 +14,8 @@ Send SIP packet to an URI at a given address and port
         @socket.on 'error', (error) ->
           debug.dev "Socket error: #{error}"
 
-        @socket.once 'listening', ->
-          address = socket.address()
+        @socket.once 'listening', =>
+          address = @socket.address()
           debug "Listening for messages on #{address.address}:#{address.port}"
 
         return
@@ -59,8 +59,8 @@ We route based on the URI domain, as per RFC.
         headers.copy message
         content.body.copy message, headers.length
 
-        await new Promise (resolve,reject) ->
-          socket.send message, 0, message.length, target.port, target.name, (error) ->
+        await new Promise (resolve,reject) =>
+          @socket.send message, 0, message.length, target.port, target.name, (error) ->
             if error
               reject error
             else

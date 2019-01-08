@@ -1,4 +1,7 @@
     ({expect} = require 'chai').should()
+    dgram = require 'dgram'
+
+    port = 7124
 
     provisioning = "http://#{process.env.COUCHDB_USER}:#{process.env.COUCHDB_PASSWORD}@couchdb:5984/provisioning"
     before ->
@@ -119,7 +122,6 @@
         o.should.be.a 'function'
 
       it 'should evaluate the function', (done) ->
-        dgram = require 'dgram'
         socket = dgram.createSocket 'udp4'
         after -> socket.close()
 
@@ -141,6 +143,64 @@
           Content-Length: 0
           \n
         '''.replace /\n/g, '\r\n'
-        socket.bind 7124
-        socket.send msg, 0, msg.length, 7124, '127.0.0.1'
+        socket.bind port
+        socket.send msg, 0, msg.length, port, '127.0.0.1'
+        port++
+        return
+
+    describe 'sip-sender', ->
+      m = require '../sip-sender'
+      ms = require '../message-summary'
+      it 'should return a class', ->
+        m.should.be.a 'function'
+        socket = dgram.createSocket 'udp4'
+        after -> socket.close()
+        o = new m socket
+
+      it 'should notify', (done) ->
+        socket = dgram.createSocket 'udp4'
+        after -> socket.close()
+        o = new m socket
+
+        socket.on 'message', (msg) ->
+          console.log msg.toString()
+          msg.toString().should.match /^NOTIFY /
+          done()
+
+        socket.bind port
+
+        dest =
+          to: "bob@localhost:#{port}"
+          uri: "bob@localhost:#{port}"
+          endpoint: 'bob'
+
+        content = ms 2,3
+
+
+        o.notify dest, content
+        port++
+        return
+
+      it 'should publish', (done) ->
+        socket = dgram.createSocket 'udp4'
+        after -> socket.close()
+        o = new m socket
+
+        socket.on 'message', (msg) ->
+          console.log msg.toString()
+          msg.toString().should.match /^PUBLISH /
+          done()
+
+        socket.bind port
+
+        dest =
+          to: "bob@localhost:#{port}"
+          uri: "bob@localhost:#{port}"
+          endpoint: 'bob'
+
+        content = ms 2,3
+
+
+        o.publish dest, content
+        port++
         return
