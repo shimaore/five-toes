@@ -1,6 +1,10 @@
     module.exports = ccnq4_receiver = (cfg) ->
       prov = new CouchDB cfg.provisioning
-      ( socket, accept = ['SUBSCRIBE'], handler) ->
+      ( socket, accept, handler ) ->
+        if typeof accept is 'function'
+          [handler,accept] = [accept,null]
+
+        accept ?= ['SUBSCRIBE']
         ua = {}
 
         socket.on 'message', (msg,rinfo) =>
@@ -12,7 +16,8 @@
 The parser returns an IncomingRequest for a SUBSCRIBE message.
 
           request = Parser.parseMessage content, ua
-          return unless request? and request.method in @accept and request.event?.event is 'message-summary'
+          console.log request, accept
+          return unless request? and request.method in accept and request.event?.event is 'message-summary'
 
           trace request.method, {number_domain,user_id}
 
@@ -36,3 +41,9 @@ Recover the number-domain from the endpoint.
           await handler {number_domain,user_id}
           return
         return
+
+    CouchDB = require 'most-couchdb'
+    Parser = require 'jssip/lib/Parser'
+    {debug} = (require 'tangible') 'five-toes:ccnq4-receiver'
+    trace = debug
+    get_prov = require './get-prov'

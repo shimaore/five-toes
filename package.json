@@ -21,6 +21,7 @@
     "nyc": "^13.1.0"
   },
   "dependencies": {
+    "jssip": "^3.3.3",
     "lru-cache": "^5.1.1",
     "most-couchdb": "^1.5.1",
     "tangible": "^3.0.0"
