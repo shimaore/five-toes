@@ -34,8 +34,8 @@
         o = m 1,2
         o.should.be.an.instanceof Content
         o.should.have.property 'event', 'message-summary'
-        o.should.have.property 'content_type'
-        o.content_type.should.be.a 'string'
+        o.should.have.property 'type'
+        o.type.should.be.a 'string'
         o.should.have.property 'body'
         o.body.should.be.an.instanceof Buffer
 
@@ -46,8 +46,8 @@
         o = m 1,2
         o.should.be.an.instanceof Content
         o.should.have.property 'event', 'Yealink-xml'
-        o.should.have.property 'content_type'
-        o.content_type.should.be.a 'string'
+        o.should.have.property 'type'
+        o.type.should.be.a 'string'
         o.should.have.property 'body'
         o.body.should.be.an.instanceof Buffer
 

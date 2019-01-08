@@ -1,5 +1,5 @@
     class Content
-      constructor: (@event,@content_type,body) ->
+      constructor: (@event,@type,body) ->
         @body = Buffer.from body
 
     module.exports = Content
