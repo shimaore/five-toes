@@ -1,10 +1,11 @@
 {
   "name": "five-toes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "DNS and NOTIFY for CCNQ4",
   "main": "index.js",
   "scripts": {
     "build": "npm install --only=dev && coffee -c *.coffee.md",
+    "prepublishOnly": "npm run build",
     "pretest": "npm run build && coffee -c test/*.coffee.md",
     "test": "nyc mocha"
   },
