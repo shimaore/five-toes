@@ -16,7 +16,6 @@
 The parser returns an IncomingRequest for a SUBSCRIBE message.
 
           request = Parser.parseMessage content, ua
-          console.log request, accept
           return unless request? and request.method in accept and request.event?.event is 'message-summary'
 
           trace request.method, {number_domain,user_id}
