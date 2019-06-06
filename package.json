@@ -1,6 +1,6 @@
 {
   "name": "five-toes",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "DNS and NOTIFY for CCNQ4",
   "main": "index.js",
   "scripts": {
