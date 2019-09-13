@@ -3,7 +3,7 @@
 
     port = 7124
 
-    provisioning = "http://#{process.env.COUCHDB_USER}:#{process.env.COUCHDB_PASSWORD}@couchdb:5984/provisioning"
+    provisioning = "http://#{process.env.COUCHDB_USER ? 'admin'}:#{process.env.COUCHDB_PASSWORD ? 'password'}@couchdb:5984/provisioning"
     before ->
       CouchDB = require 'most-couchdb'
       prov = new CouchDB provisioning
