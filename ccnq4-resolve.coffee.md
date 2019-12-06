@@ -14,7 +14,12 @@ Collect the endpoint/via fields from the local number.
 Use the endpoint name and via to route the packet.
 
         endpoint = number_doc.endpoint
-        via = number_doc.endpoint_via
+
+        if endpoint?
+          endpoint_doc = await get_prov prov, "endpoint:#{endpoint}"
+
+        via =  endpoint_doc?.via
+        via ?= number_doc.endpoint_via
 
         debug 'resolve', {via,endpoint}
         return unless endpoint?
